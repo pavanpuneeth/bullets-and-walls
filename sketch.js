@@ -1,51 +1,56 @@
-var fixedRect,movingRect,fixedrect2;
-var sp1,sp2,sp3,sp4;
+var  wall,thickness,bullet;
+var speed,weight;
 
 function setup() {
-  createCanvas(400, 400);
-  fixedRect=createSprite(200,200,100,100);
-  movingRect=createSprite(100,100,20,50);
-  fixedrect2=createSprite(200,120,20,20);
-  sp1=createSprite(30,200,30,30);
-  sp1.velocityX=5;
-  sp2=createSprite(370,200,30,30);
-  sp2.velocityX=-4;
+	
+  createCanvas(1600,400);
+  weight=random(30,52);
+  thickness=random(22,83);
+  speed=random(223,321);
 
-  sp3=createSprite(200,30,30,30);
-  sp3.velocityY=5;
-  sp4=createSprite(200,370,30,30);
-  sp4.velocityY=-4;
+bullet=createSprite(50, 200, 50, 50);
+bullet.velocityX = speed;
+
+wall=createSprite(1500,200,thickness,height/2);
+wall.shapeColor=(80,80,80);
+
 }
 
 function draw() {
-  background(220);
-  
-  movingRect.x=mouseX;
-  movingRect.y=mouseY;
-  
+  background(255,255,255);  
 
-  
-  if(isTouching(movingRect,fixedRect)){
-  movingRect.shapeColor="blue";
-  fixedRect.shapeColor="blue";
-  }
-  else if(isTouching(movingRect,fixedrect2)){
-    movingRect.shapeColor="blue";
-    fixedrect2.shapeColor="blue";
-  }
-  else{
-    movingRect.shapeColor="red";
-  fixedRect.shapeColor="red";
-  fixedrect2.shapeColor="red";
-  }
-  
-  bounceOff(sp1,sp2);
-  bounceOff(sp3,sp4);
+  if(hasCollided(bullet, wall))
+  {
+bullet.velocityX=0;
+var damage=0.5 * weight* speed* speed/(thickness *thickness *thickness);
 
-  drawSprites();
-  //rectMode(CENTER);
-  //rect(200,200,100,100);
-  fill("red");
-  text(mouseX+","+mouseY,mouseX,mouseY);
+
+if(damage>10)
+{
+wall.shapeColor=color(255,0,0);
+
 }
 
+if(damage<10)
+{
+  wall.shapeColor=color(0,255,0);
+  
+}
+  }
+  
+  
+  drawSprites();
+  //hasCollided();
+}
+
+function hasCollided(lbullet, lwall)
+{
+  bulletRightEdge=lbullet.x +lbullet.width;
+  wallLeftEdge=lwall.x;
+  if (bulletRightEdge >=wallLeftEdge)
+  {
+    return true
+  }
+  return false;
+
+}
